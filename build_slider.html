@@ -1,0 +1,200 @@
+
+<html>
+
+
+<head>
+
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://www.yakimaherald.com/app/lib/handlebars/handlebars-v4.0.10.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+
+<style>
+ h3 {
+    
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px;
+}
+
+.votes, .percent {
+    text-align: right !important;
+}
+.key {
+    color: #333333;
+    font-family: Arial,sans-serif;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+.pct-chart {
+    width: 30%;
+}
+.chart-container {
+    background: none repeat scroll 0 0 #DDDDDD;
+    /*border: 1px solid #FFFFFF;*/
+    height: 15px;
+    width: 100%;
+}
+.chart-interior {
+    background: none repeat scroll 0 0 #1E1E1E;
+    height:100%;
+
+}
+
+
+
+.carousel-inner>.item {
+    width:70%;
+    margin: 15px auto;
+}
+
+
+
+
+
+table > tbody > tr > td,
+table > tbody > tr.elex-result-table> th,
+table > tfoot > tr.elex-result-table> td,
+table > tfoot > tr.elex-result-table > th,
+table > thead > tr.elex-result-table > td,
+table > thead > tr.elex-result-table > th {font-size: 14px !important;}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner" role="listbox" id="carousel-anchor">
+                
+
+    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+            <span><i class="fas fa-angle-left fa-3x" aria-hidden="true"></i></span>
+            <span class="sr-only">Previous</span>
+    </a>
+        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span><i class="fas fa-angle-right fa-3x" aria-hidden="true"></i></span>
+                <span class="sr-only">Next</span>
+        </a>
+    </div>   
+    </div>
+    </div>  
+    
+ </div>
+</div>
+<script id="first-elex-table" type="text/x-handlebars-template">
+    <div class='item active'>
+    <table class="table table-condensed elex-results-table">
+        <thead>
+            <tr>
+                <th>{{race}}</th>
+                <th class="votes">Votes</th>
+                <th class="percent">Pct.</th>
+                <th ></th>
+            </tr>
+        </thead>   
+        
+        <tbody>
+            <tr>
+                <td>{{candidate0}}</td>
+                <td class="votes">{{vote0}}</td>
+                <td class="percent">{{percent0}}%</td>
+                <td class="pct-chart">
+                    <div class="chart-container">
+                        <div class="chart-interior" style="width:{{percent0}}%;"></div>
+                    </div>
+                </td>
+             </tr>
+                    
+    <tr>
+        <td>{{candidate1}}</td>
+        <td class="votes">{{vote1}}</td>
+        <td class="percent">{{percent1}}%</td>
+        <td class="pct-chart">
+          <div class="chart-container">
+            <div class="chart-interior" style="width:{{percent1}}%;"></div>
+           </div>
+        </td>
+    </tr>
+
+    </tbody>
+    </table>
+    </div>
+  
+</script>
+
+
+    <script id="elex-table" type="text/x-handlebars-template">
+        <div class='item'>
+        <table class="table table-condensed elex-results-table">
+            <thead>
+                <tr>
+                    <th>{{race}}</th>
+                    <th class="votes">Votes</th>
+                    <th class="percent">Pct.</th>
+                    <th ></th>
+                </tr>
+            </thead>   
+            
+            <tbody>
+                <tr>
+                    <td>{{candidate0}}</td>
+                    <td class="votes">{{vote0}}</td>
+                    <td class="percent">{{percent0}}%</td>
+                    <td class="pct-chart">
+                        <div class="chart-container">
+                            <div class="chart-interior" style="width:{{percent0}}%;"></div>
+                        </div>
+                    </td>
+                 </tr>
+                        
+        <tr>
+            <td>{{candidate1}}</td>
+            <td class="votes">{{vote1}}</td>
+            <td class="percent">{{percent1}}%</td>
+            <td class="pct-chart">
+              <div class="chart-container">
+                <div class="chart-interior" style="width:{{percent1}}%;"></div>
+               </div>
+            </td>
+        </tr>
+
+        </tbody>
+        </table>
+        </div>
+    </script>
+
+
+    <script>
+    $(function(){
+        $.getJSON("results.json")
+                .done(function(data){
+                processData(data);
+                });
+    
+            function processData(data){
+                for (var i = 0; i<data.length;i++){
+                    var race = data[i]
+                    if(i != 0){
+                        var tableScript = $("#elex-table").html();
+                    } else {
+                        var tableScript = $("#first-elex-table").html();
+                    }
+                    var tableTemplate = Handlebars.compile(tableScript);
+                    $('div#carousel-anchor').append(tableTemplate(race));
+                
+            };
+    
+    
+            };
+        });
+    
+    </script>
+
+</body>
+</html>

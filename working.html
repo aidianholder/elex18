@@ -1,0 +1,231 @@
+
+<html>
+<head>
+
+
+
+
+
+<script src="https://www.yakimaherald.com/app/lib/handlebars/handlebars-v4.0.10.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<style>
+    h3 {
+    
+        font-size: 16px;
+        font-weight: bold;
+        margin: 5px;
+    }
+    
+    .votes, .percent {
+        text-align: right !important;
+    }
+    .key {
+        color: #333333;
+        font-family: Arial,sans-serif;
+        font-size: 14px;
+        margin-bottom: 15px;
+    }
+    .pct-chart {
+        width: 30%;
+    }
+    .chart-container {
+        background: none repeat scroll 0 0 #DDDDDD;
+        /*border: 1px solid #FFFFFF;*/
+        height: 15px;
+        width: 100%;
+    }
+    .chart-interior {
+        background: none repeat scroll 0 0 #1E1E1E;
+        height:100%;
+    
+    }
+    
+    
+    
+    
+    
+    
+    table > tbody > tr > td,
+    table > tbody > tr.elex-result-table> th,
+    table > tfoot > tr.elex-result-table> td,
+    table > tfoot > tr.elex-result-table > th,
+    table > thead > tr.elex-result-table > td,
+    table > thead > tr.elex-result-table > th {font-size: 14px !important;}
+    
+    </style>
+    </head>
+    <body>
+    
+        
+    <div class="container">
+    <div class="row">
+      <div id="elex" class="col-md-12">
+      </div>
+    </div>
+    </div>
+
+    <script id="panel-head" type="text/x-handlebars-template">
+    
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <p class="panel-title">{{group}}</p>
+        </div>
+        
+
+      
+    </script>
+    
+    <script id="panel-close" type="text/x-handlebars-template">
+      
+    </script>
+    <script id="elex-table" type="text/x-handlebars-template">
+        <table class="table table-condensed elex-results-table">
+            <thead>
+                <tr>
+                    <th>{{race}}</th>
+                    <th class="votes">Votes</th>
+                    <th class="percent">Pct.</th>
+                    <th ></th>
+                </tr>
+            </thead>   
+            
+            <tbody>
+                <tr>
+                    <td>{{candidate0}}</td>
+                    <td class="votes">{{vote0}}</td>
+                    <td class="percent">{{percent0}}%</td>
+                    <td class="pct-chart">
+                        <div class="chart-container">
+                            <div class="chart-interior" style="width:{{percent0}}%;"></div>
+                        </div>
+                    </td>
+                 </tr>
+                        
+                    
+                
+        <tr>
+            <td>{{candidate1}}</td>
+            <td class="votes">{{vote1}}</td>
+            <td class="percent">{{percent1}}%</td>
+            <td class="pct-chart">
+              <div class="chart-container">
+                <div class="chart-interior" style="width:{{percent1}}%;"></div>
+               </div>
+            </td>
+        </tr>
+
+        </tbody>
+        </table>
+              
+            
+         
+        
+     
+    
+    
+    </script>
+    
+    <script>
+    
+    $(function(){
+
+            $.getJSON("https://www.yakimaherald.com/app/elex/results.json")
+                .done(function(data){
+                    console.log(data)
+                    processData(data);
+                });
+
+            /*var spreadsheet_key = '13LpjrYJifSgvSgdY9lNYx-XOe7M-yaqb6pW9Uh1Fi_M';
+    
+                
+    
+            function initializeTabletopObject(){
+              Tabletop.init({
+                key: spreadsheet_key,
+                callback: function(data, tabletop){
+                  console.log(data)
+                  for (i=0;i<data.length;i++){
+                         console.log(data[i]['group'])
+                      }
+                  processData(data)
+                },
+                simpleSheet: true,
+                debug: true
+          })}*/
+    
+    function processData(data){
+         var groups = {}
+         for (var i = 0; i<data.length; i++) {
+             var groupName = data[i].group;
+             if (!groups[groupName]) {
+                  groups[groupName] = [];
+                 }
+             groups[groupName].push(data[i])
+            }
+        var groupNames = Object.keys(groups)
+             //for (var j=0;j<data.length;j++){
+        for (var j = 0; j<groupNames.length; j++){
+            gname = groupNames[j]
+            console.log(gname)
+    
+            var panelScript = $("#panel-head").html();
+            var panelTemplate = Handlebars.compile(panelScript);
+            $('div#elex').append(panelTemplate({group: gname}))
+            var races = groups[gname]
+            console.log(races)
+            for (var k = 0; k<races.length;k++){
+                    var race = races[k]
+                    var tableScript = $("#elex-table").html();
+                    var tableTemplate = Handlebars.compile(tableScript);
+                    $('div#elex').append(tableTemplate(race));
+                }
+            $('div#elex').append('</div>');
+            }
+    
+             //}
+    
+           }
+          /*console.log(groups)
+          console.log(Object.keys(groups))
+          var groupData = Object.keys(groups)
+          for (var j=0; j<groupData.length; j++){
+              var raceData = "{ races: " + groups[groupData[j]] + "}";
+              console.log(raceData)
+              var tableScript = $("#elex-table").html();
+              var tableTemplate = Handlebars.compile(tableScript);
+              $('div#elex').html(tableTemplate(raceData));
+              console.log(tableTemplate(raceData))
+          }}*/
+    
+          /*for (group in groups){
+              var groupNames = groups.keys()
+    
+              var tableScript = $("#elex-table").html();
+              var tableTemplate = Handlebars.compile(tableScript);
+              $('div#elex').html(tableTemplate(group))
+            }
+    
+         } */
+    
+        
+            
+        
+    
+    
+    
+    /*initializeTabletopObject();*/
+    
+    
+    
+    });
+    
+    
+    
+    </script>
+
+</body>
+    
+</html>
