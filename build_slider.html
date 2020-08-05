@@ -2,14 +2,13 @@
 <html>
 
 
-<head>
+<head title="elex slider">
 
 
-
+<script src="https://www.yakimaherald.com/app/lib/handlebars/handlebars-v4.0.10.js"></script>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="https://www.yakimaherald.com/app/lib/handlebars/handlebars-v4.0.10.js"></script>
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
 
@@ -87,7 +86,7 @@ table > thead > tr.elex-result-table > th {font-size: 14px !important;}
     
  </div>
 </div>
-<script id="first-elex-table" type="text/x-handlebars-template">
+<!--<script id="first-elex-table" type="text/x-handlebars-template">
     <div class='item active'>
     <table class="table table-condensed elex-results-table">
         <thead>
@@ -126,11 +125,11 @@ table > thead > tr.elex-result-table > th {font-size: 14px !important;}
     </table>
     </div>
   
-</script>
+</script>-->
 
 
     <script id="elex-table" type="text/x-handlebars-template">
-        <div class='item'>
+        <div class='item active'>
         <table class="table table-condensed elex-results-table">
             <thead>
                 <tr>
@@ -142,27 +141,18 @@ table > thead > tr.elex-result-table > th {font-size: 14px !important;}
             </thead>   
             
             <tbody>
+            {{#each candidates}}
                 <tr>
-                    <td>{{candidate0}}</td>
-                    <td class="votes">{{vote0}}</td>
-                    <td class="percent">{{percent0}}%</td>
+                    <td>{{candidate}}</td>
+                    <td class="votes">{{vote}}</td>
+                    <td class="percent">{{percent}}%</td>
                     <td class="pct-chart">
                         <div class="chart-container">
-                            <div class="chart-interior" style="width:{{percent0}}%;"></div>
+                            <div class="chart-interior" style="width:{{percent}}%;"></div>
                         </div>
                     </td>
                  </tr>
-                        
-        <tr>
-            <td>{{candidate1}}</td>
-            <td class="votes">{{vote1}}</td>
-            <td class="percent">{{percent1}}%</td>
-            <td class="pct-chart">
-              <div class="chart-container">
-                <div class="chart-interior" style="width:{{percent1}}%;"></div>
-               </div>
-            </td>
-        </tr>
+            {{/each}}
 
         </tbody>
         </table>
@@ -172,7 +162,7 @@ table > thead > tr.elex-result-table > th {font-size: 14px !important;}
 
     <script>
     $(function(){
-        $.getJSON("results.json")
+        $.getJSON("https://www.yakimaherald.com/app/elex/results.json")
                 .done(function(data){
                 processData(data);
                 });
@@ -180,18 +170,14 @@ table > thead > tr.elex-result-table > th {font-size: 14px !important;}
             function processData(data){
                 for (var i = 0; i<data.length;i++){
                     var race = data[i]
-                    if(i != 0){
-                        var tableScript = $("#elex-table").html();
-                    } else {
-                        var tableScript = $("#first-elex-table").html();
-                    }
+                    var tableScript = $("#elex-table").html();
                     var tableTemplate = Handlebars.compile(tableScript);
                     $('div#carousel-anchor').append(tableTemplate(race));
                 
-            };
+            }
     
     
-            };
+            }
         });
     
     </script>

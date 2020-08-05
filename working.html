@@ -1,6 +1,7 @@
 
-<html>
+<html lang="en">
 <head>
+    <title>Election Results</title>
 
 
 
@@ -62,25 +63,11 @@
         
     <div class="container">
     <div class="row">
-      <div id="elex" class="col-md-12">
+      <div id="elex" class="col-md-6">
       </div>
     </div>
     </div>
 
-    <script id="panel-head" type="text/x-handlebars-template">
-    
-    <div class="panel panel-primary">
-        <div class="panel-heading">
-            <p class="panel-title">{{group}}</p>
-        </div>
-        
-
-      
-    </script>
-    
-    <script id="panel-close" type="text/x-handlebars-template">
-      
-    </script>
     <script id="elex-table" type="text/x-handlebars-template">
         <table class="table table-condensed elex-results-table">
             <thead>
@@ -90,32 +77,24 @@
                     <th class="percent">Pct.</th>
                     <th ></th>
                 </tr>
-            </thead>   
-            
-            <tbody>
+            </thead>
+             <tbody>
+            {{#each candidates}}
+
                 <tr>
-                    <td>{{candidate0}}</td>
-                    <td class="votes">{{vote0}}</td>
-                    <td class="percent">{{percent0}}%</td>
+                    <td>{{candidate}} <span class="small">{{party}}</span></td>
+                    <td class="votes">{{vote}}</td>
+                    <td class="percent">{{percent}}%</td>
                     <td class="pct-chart">
                         <div class="chart-container">
-                            <div class="chart-interior" style="width:{{percent0}}%;"></div>
+                            <div class="chart-interior" style="width:{{percent}}%;"></div>
                         </div>
                     </td>
                  </tr>
+                {{/each}}
                         
                     
-                
-        <tr>
-            <td>{{candidate1}}</td>
-            <td class="votes">{{vote1}}</td>
-            <td class="percent">{{percent1}}%</td>
-            <td class="pct-chart">
-              <div class="chart-container">
-                <div class="chart-interior" style="width:{{percent1}}%;"></div>
-               </div>
-            </td>
-        </tr>
+
 
         </tbody>
         </table>
@@ -134,30 +113,12 @@
 
             $.getJSON("https://www.yakimaherald.com/app/elex/results.json")
                 .done(function(data){
-                    console.log(data)
+                    console.log(data);
                     processData(data);
                 });
-
-            /*var spreadsheet_key = '13LpjrYJifSgvSgdY9lNYx-XOe7M-yaqb6pW9Uh1Fi_M';
-    
-                
-    
-            function initializeTabletopObject(){
-              Tabletop.init({
-                key: spreadsheet_key,
-                callback: function(data, tabletop){
-                  console.log(data)
-                  for (i=0;i<data.length;i++){
-                         console.log(data[i]['group'])
-                      }
-                  processData(data)
-                },
-                simpleSheet: true,
-                debug: true
-          })}*/
     
     function processData(data){
-         var groups = {}
+         var groups = {};
          for (var i = 0; i<data.length; i++) {
              var groupName = data[i].group;
              if (!groups[groupName]) {
@@ -165,19 +126,17 @@
                  }
              groups[groupName].push(data[i])
             }
-        var groupNames = Object.keys(groups)
+        var groupNames = Object.keys(groups);
              //for (var j=0;j<data.length;j++){
         for (var j = 0; j<groupNames.length; j++){
-            gname = groupNames[j]
-            console.log(gname)
+            gname = groupNames[j];
+            console.log(gname);
     
-            var panelScript = $("#panel-head").html();
-            var panelTemplate = Handlebars.compile(panelScript);
-            $('div#elex').append(panelTemplate({group: gname}))
-            var races = groups[gname]
-            console.log(races)
+            
+            var races = groups[gname];
+            console.log(races);
             for (var k = 0; k<races.length;k++){
-                    var race = races[k]
+                    var race = races[k];
                     var tableScript = $("#elex-table").html();
                     var tableTemplate = Handlebars.compile(tableScript);
                     $('div#elex').append(tableTemplate(race));
@@ -185,39 +144,10 @@
             $('div#elex').append('</div>');
             }
     
-             //}
+
     
            }
-          /*console.log(groups)
-          console.log(Object.keys(groups))
-          var groupData = Object.keys(groups)
-          for (var j=0; j<groupData.length; j++){
-              var raceData = "{ races: " + groups[groupData[j]] + "}";
-              console.log(raceData)
-              var tableScript = $("#elex-table").html();
-              var tableTemplate = Handlebars.compile(tableScript);
-              $('div#elex').html(tableTemplate(raceData));
-              console.log(tableTemplate(raceData))
-          }}*/
-    
-          /*for (group in groups){
-              var groupNames = groups.keys()
-    
-              var tableScript = $("#elex-table").html();
-              var tableTemplate = Handlebars.compile(tableScript);
-              $('div#elex').html(tableTemplate(group))
-            }
-    
-         } */
-    
-        
-            
-        
-    
-    
-    
-    /*initializeTabletopObject();*/
-    
+
     
     
     });

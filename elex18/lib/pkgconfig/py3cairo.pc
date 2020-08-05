@@ -1,0 +1,8 @@
+prefix=/Users/aidianholder/src/elex18/elex18/elex18
+
+Name: Pycairo
+Description: Python 3 bindings for cairo
+Version: 1.17.1
+Requires: cairo
+Cflags: -I${prefix}/include/pycairo
+Libs:

@@ -1,0 +1,69 @@
+{
+        "race": "Yakima County Commission District 1",
+        "group": "Yakima County",
+        "candidates": [
+            {
+                "candidate": "Amanda McKinney",
+                "vote": 0,
+                "percent": 0.0,
+                "party": " Republican Party"
+            },
+            {
+                "candidate": "Cindy O'Halloran",
+                "vote": 0,
+                "percent": 0.0,
+                "party": "States No Party Preference"
+            },
+            {
+                "candidate": "Vicki Baker",
+                "vote": 0,
+                "percent": 0.0,
+                "party": " Republican Party"
+            },
+            {
+                "candidate": "WRITE IN",
+                "vote": 0,
+                "percent": 0.0,
+                "party": ""
+            }
+
+        ]
+},
+{
+        "race": "Yakima County Commission District 2",
+        "group": "Yakima County",
+        "candidates": [
+            {
+                "candidate": "Ron Anderson",
+                "vote": 0,
+                "percent": 0.0,
+                "party": " Republican Party"
+            },
+            {
+                "candidate": "WRITE IN",
+                "vote": 0,
+                "percent": 0.0,
+                "party": ""
+            }
+
+        ]
+},
+{
+        "race": "Sunnyside Transportation Benefit District",
+        "group": "Yakima County",
+        "candidates": [
+            {
+                "candidate": "Yes",
+                "vote": 0,
+                "percent": 0.0,
+                "party": ""
+            },
+            {
+                "candidate": "No",
+                "vote": 0,
+                "percent": 0.0,
+                "party": ""
+            }
+
+        ]
+}
